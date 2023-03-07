@@ -34,6 +34,30 @@ async function callPythonMethod(inputString) {
 
 
 
+async function callApi() {
+  const response = await fetch('/api/my-method', {
+    method: 'POST',
+    body: JSON.stringify({ input: 'Hello World' }),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+
+  if (response.ok) {
+    const result = await response.text()
+    console.log('Result:', result) // affiche 'Success' dans la console
+  } else {
+    console.error('Error')
+  }
+}
+
+callApi()
+
+
+
+
+
+
 
 
 
