@@ -1,24 +1,16 @@
 # fakkkaef
 
-const { spawn } = require('child_process');
+from flask import Flask, request
 
-const pythonScriptPath = 'path/to/myPythonScript.py';
-const inputString = 'Hello world!';
+app = Flask(__name__)
 
-const pythonProcess = spawn('python', [pythonScriptPath, inputString]);
-
-pythonProcess.stdout.on('data', (data) => {
-  console.log(`stdout: ${data}`);
-});
-
-pythonProcess.stderr.on('data', (data) => {
-  console.error(`stderr: ${data}`);
-});
-
-pythonProcess.on('close', (code) => {
-  console.log(`child process exited with code ${code}`);
-});
-*
+@app.route('/my-method', methods=['POST'])
+def my_method():
+    input_string = request.get_json()['inputString']
+    # Faites quelque chose avec input_string, par exemple écrire dans un fichier
+    with open('output.txt', 'w') as f:
+        f.write(input_string)
+    return {'success': True}
 
 
 
@@ -28,12 +20,4 @@ pythonProcess.on('close', (code) => {
 
 
 
-exec(`python ${pythonScriptPath} ${inputString}`, (error, stdout, stderr) => {
-  if (error) {
-    console.error(`exec error: ${error}`);
-    return;
-  }
-  console.log(`stdout: ${stdout}`);
-  console.error(`stderr: ${stderr}`);
-});
 
