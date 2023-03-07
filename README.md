@@ -18,3 +18,22 @@ pythonProcess.stderr.on('data', (data) => {
 pythonProcess.on('close', (code) => {
   console.log(`child process exited with code ${code}`);
 });
+*
+
+
+
+
+
+
+
+
+
+exec(`python ${pythonScriptPath} ${inputString}`, (error, stdout, stderr) => {
+  if (error) {
+    console.error(`exec error: ${error}`);
+    return;
+  }
+  console.log(`stdout: ${stdout}`);
+  console.error(`stderr: ${stderr}`);
+});
+
