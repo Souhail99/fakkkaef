@@ -70,3 +70,8 @@ pythonProcess.stdin.write(`methode('${argument}')\n`);
 // Fermer l'entrée standard (stdin) pour que le script Python sache que nous avons fini d'envoyer des données
 pythonProcess.stdin.end();
 
+
+def methode(argument):
+    # Code de votre méthode ici, en utilisant l'argument
+    print("Méthode appelée avec succès avec l'argument :", argument)
+
