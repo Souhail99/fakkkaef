@@ -77,6 +77,22 @@ pythonProcess.on('close', (code) => {
 });
 
 
+const { exec } = require('child_process');
 
+const input_data = 'my_input_data';
+const script_path = '/path/to/your/script.py';
+
+// execute the python script
+exec(`python ${script_path} ${input_data}`, (error, stdout, stderr) => {
+  if (error) {
+    console.error(`error: ${error.message}`);
+    return;
+  }
+  if (stderr) {
+    console.error(`stderr: ${stderr}`);
+    return;
+  }
+  console.log(`stdout: ${stdout}`);
+});
 
 
