@@ -1,0 +1,21 @@
+Définition :
+Le protocole Semaphore est un protocole de consensus décentralisé qui utilise des seuils et des preuves de travail pour garantir la sécurité et la résilience de la blockchain. Les seuils sont une technique cryptographique qui permet de prendre des décisions collectives entre plusieurs parties décentralisées, tandis que les preuves de travail permettent de valider les transactions et de créer de nouveaux blocs.
+Explication :
+Le protocole Semaphore fonctionne en combinant les seuils et les preuves de travail pour parvenir à un consensus décentralisé dans la blockchain. Les mineurs du réseau effectuent des calculs de preuve de travail pour valider les transactions et produire de nouveaux blocs, tout en utilisant des signatures à seuil pour s'assurer que les blocs sont acceptés par la majorité des nœuds. Les seuils et les signatures à seuil sont utilisés pour permettre aux nœuds de s'accorder sur l'acceptation ou le rejet d'un bloc, en requérant l'approbation d'un certain nombre de nœuds pour que la signature soit considérée comme valide.
+
+L'utilisation de seuils dans le protocole Semaphore permet de définir des règles pour la validation des transactions et la création de nouveaux blocs qui nécessitent l'approbation d'un certain nombre de parties pour être acceptées. Cette technique de seuils permet de renforcer la sécurité de la blockchain en rendant plus difficile les attaques malveillantes, comme les attaques par majorité. En outre, elle peut également permettre de réduire la complexité des protocoles de consensus, ce qui facilite leur implémentation et leur déploiement.
+Utilisation de ZKP :
+Le protocole Semaphore peut également être combiné avec des techniques de confidentialité telles que les zero-knowledge proofs pour renforcer la confidentialité et la sécurité des transactions dans la blockchain. Les zero-knowledge proofs permettent de vérifier les transactions sans avoir à divulguer l'ensemble de leurs détails, ce qui peut améliorer la confidentialité et la sécurité de la blockchain. En combinant les seuils et les zero-knowledge proofs, le protocole Semaphore peut fournir une sécurité renforcée et une confidentialité accrue pour les transactions effectuées sur la blockchain.
+En somme, le protocole Semaphore est un protocole de consensus décentralisé qui utilise des seuils et des preuves de travail pour parvenir à un consensus décentralisé dans la blockchain. Il offre une sécurité renforcée et une résilience accrue contre les attaques malveillantes. En utilisant des techniques de confidentialité telles que les zero-knowledge proofs, il peut également renforcer la confidentialité et la sécurité des transactions effectuées sur la blockchain.
+
+
+
+
+
+
+
+Définition : Le liquid voting est un système de vote électronique décentralisé qui permet aux utilisateurs de voter directement sur des propositions et de transférer leurs droits de vote à d'autres personnes en fonction de leur expertise sur un sujet spécifique.
+
+Explication : Le liquid voting permet aux utilisateurs de voter de manière flexible et dynamique en transférant leurs droits de vote à des personnes de confiance, qui peuvent ensuite les utiliser pour voter sur des propositions en leur nom. Les utilisateurs peuvent également retirer leurs droits de vote à tout moment et les transférer à une autre personne si leur opinion ou leur expertise change. Le liquid voting peut être utilisé pour les élections, les sondages d'opinion, les assemblées générales et les référendums, ainsi que pour les processus de prise de décision dans les entreprises et les organisations.
+
+Utilisation avec les blockchain : Le liquid voting peut être implémenté sur une blockchain pour assurer la transparence, la sécurité et l'intégrité du processus de vote. Les utilisateurs peuvent voter en utilisant leurs identités numériques cryptographiques sur la blockchain et transférer leurs droits de vote en utilisant des contrats intelligents. Les résultats du vote peuvent être stockés de manière transparente et immuable sur la blockchain, ce qui permet à tous les utilisateurs de vérifier les résultats et de s'assurer que le processus de vote a été équitable et légitime. Les blockchain comme Ethereum, EOS, Tezos ou Holochain offrent des fonctionnalités spécifiques pour la mise en place du liquid voting.
