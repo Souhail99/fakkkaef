@@ -49,3 +49,65 @@ if (data) {
 } else {
   res.status(404).json({ message: 'Adresse non trouvée' });
 }
+
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract Voting {
+    address public owner;
+    uint public minimumTokensToPropose;
+    mapping(address => uint) public balances;
+    mapping(uint => Proposal) public proposals;
+    uint public numProposals;
+
+    struct Proposal {
+        string name;
+        string description;
+        uint votes;
+        bool executed;
+    }
+
+    event ProposalCreated(string name, string description);
+    event Voted(uint proposalId, address voter);
+
+    constructor(uint _minimumTokensToPropose) {
+        owner = msg.sender;
+        minimumTokensToPropose = _minimumTokensToPropose;
+    }
+
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Only owner can call this function.");
+        _;
+    }
+
+    function createProposal(string memory _name, string memory _description) public {
+        require(balances[msg.sender] >= minimumTokensToPropose, "Not enough tokens to propose.");
+        numProposals++;
+        proposals[numProposals] = Proposal(_name, _description, 0, false);
+        emit ProposalCreated(_name, _description);
+    }
+
+    function vote(uint _proposalId) public {
+        require(balances[msg.sender] > 0, "No tokens to vote.");
+        require(_proposalId <= numProposals, "Invalid proposal ID.");
+        require(!proposals[_proposalId].executed, "Proposal has already been executed.");
+        proposals[_proposalId].votes += balances[msg.sender];
+        emit Voted(_proposalId, msg.sender);
+    }
+
+    function executeProposal(uint _proposalId) public onlyOwner {
+        require(_proposalId <= numProposals, "Invalid proposal ID.");
+        require(!proposals[_proposalId].executed, "Proposal has already been executed.");
+        require(proposals[_proposalId].votes * 2 > totalSupply(), "Not enough votes to execute proposal.");
+        proposals[_proposalId].executed = true;
+    }
+
+    function totalSupply() public view returns (uint) {
+        uint _totalSupply = 0;
+        for (uint i = 0; i < numProposals; i++) {
+            _totalSupply += balances[address(i)];
+        }
+        return _totalSupply;
+    }
+}
