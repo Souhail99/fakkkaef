@@ -1,59 +1,58 @@
-function FAQ() {
-  const [searchTerm, setSearchTerm] = React.useState("");
+import React, { useState } from "react";
 
-  const handleSearchChange = (event) => {
+export default function FaqPage() {
+  const [faqs, setFaqs] = useState([
+    {
+      question: "Qu'est-ce que Next.js ?",
+      answer: "Next.js est un framework JavaScript pour le développement web côté serveur et côté client.",
+      showAnswer: false
+    },
+    {
+      question: "Qu'est-ce que React ?",
+      answer: "React est une bibliothèque JavaScript pour la construction d'interfaces utilisateur.",
+      showAnswer: false
+    },
+    {
+      question: "Qu'est-ce que useState ?",
+      answer: "useState est un hook qui permet de gérer l'état d'un composant React.",
+      showAnswer: false
+    },
+    {
+      question: "Comment utiliser useState ?",
+      answer: "Pour utiliser useState, il faut d'abord l'importer depuis la bibliothèque React, puis appeler le hook dans le corps du composant.",
+      showAnswer: false
+    }
+  ]);
+
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handleSearch = (event) => {
     setSearchTerm(event.target.value);
   };
 
-  return (
-    <div>
-      <h1>FAQ</h1>
-      <div>
-        <input
-          type="text"
-          placeholder="Recherche"
-          value={searchTerm}
-          onChange={handleSearchChange}
-        />
-        <button>Rechercher</button>
-      </div>
-      {faqData
-        .filter(
-          (item) =>
-            item.question.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            item.answer.toLowerCase().includes(searchTerm.toLowerCase())
-        )
-        .map((item, index) => (
-          <div key={index}>
-            <h2 className="question">{item.question}</h2>
-            <p className="answer">{item.answer}</p>
-          </div>
-        ))}
-    </div>
+  const handleToggleAnswer = (index) => {
+    const newFaqs = [...faqs];
+    newFaqs[index].showAnswer = !newFaqs[index].showAnswer;
+    setFaqs(newFaqs);
+  };
+
+  const filteredFaqs = faqs.filter((faq) =>
+    faq.question.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-
-.question {
-  display: block;
-  margin-bottom: 10px;
-}
-
-.answer {
-  display: none;
-}
-
-.question-button {
-  display: inline-block;
-  margin-left: 10px;
-  padding: 5px;
-  background-color: #ccc;
-  color: #000;
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
-}
-
-.question-button:hover {
-  background-color: #aaa;
-  color: #fff;
+  return (
+    <div>
+      <h1>FAQs</h1>
+      <input type="text" onChange={handleSearch} />
+      {filteredFaqs.map((faq, index) => (
+        <div key={index}>
+          <h3>{faq.question}</h3>
+          <button onClick={() => handleToggleAnswer(index)}>
+            {faq.showAnswer ? "Masquer la réponse" : "Afficher la réponse"}
+          </button>
+          {faq.showAnswer && <p>{faq.answer}</p>}
+        </div>
+      ))}
+    </div>
+  );
 }
