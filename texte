@@ -1,7 +1,35 @@
-OpenZeppelin 4.x Governance est une bibliothèque de smart contracts open-source qui permet aux développeurs de mettre en place des fonctionnalités de gouvernance dans leurs contrats intelligents Ethereum. Voici les trois parties sur OpenZeppelin 4.x Governance :
+$(document).ready(function() {
+  $('.question').click(function() {
+    $(this).next('.answer').slideToggle();
+  });
+});
 
-Fonctionnalités de gouvernance : OpenZeppelin 4.x Governance fournit plusieurs fonctionnalités de gouvernance telles que la proposition de vote, la votation, l'exécution de vote et la révocation de vote. Ces fonctionnalités peuvent être facilement intégrées dans les contrats intelligents et permettent aux utilisateurs de prendre des décisions importantes telles que l'ajout de nouvelles fonctionnalités, la modification des paramètres et la mise en œuvre de nouvelles politiques.
+<head>
+  <script src="/faq.js"></script>
+</head>
 
-Utilisation de l'ERC-20 : OpenZeppelin 4.x Governance est compatible avec l'ERC-20, ce qui signifie que les détenteurs de tokens peuvent voter en fonction de leur participation dans le système. Les développeurs peuvent personnaliser les paramètres du contrat de gouvernance pour permettre aux utilisateurs de voter en fonction du nombre de tokens qu'ils détiennent. Cela rend le processus de gouvernance plus juste et transparent, car les utilisateurs ayant une participation plus importante dans le système auront une voix plus forte dans les décisions.
+const faqData = [
+  {
+    question: "Qu'est-ce que Next.js ?",
+    answer: "Next.js est un framework pour React qui facilite la création d'applications web performantes et évolutives."
+  },
+  {
+    question: "Comment puis-je ajouter jQuery à mon application Next.js ?",
+    answer: "Vous pouvez ajouter jQuery en utilisant npm ou en ajoutant la bibliothèque directement dans votre fichier HTML."
+  },
+  // ...
+];
 
-Sécurité et fiabilité : OpenZeppelin 4.x Governance est une bibliothèque bien établie et largement utilisée, ce qui garantit la sécurité et la fiabilité des contrats intelligents qui l'utilisent. Les développeurs peuvent être sûrs que les fonctionnalités de gouvernance qu'ils implémentent sont testées et éprouvées, ce qui minimise les risques de failles de sécurité ou de bogues. De plus, les contrats intelligents OpenZeppelin 4.x Governance sont régulièrement mis à jour pour garantir leur conformité avec les dernières normes de sécurité et les meilleures pratiques de développement.
+function FAQ() {
+  return (
+    <div>
+      <h1>FAQ</h1>
+      {faqData.map((item, index) => (
+        <div key={index}>
+          <h2 className="question">{item.question}</h2>
+          <p className="answer">{item.answer}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
