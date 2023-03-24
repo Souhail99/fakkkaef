@@ -1,35 +1,47 @@
-$(document).ready(function() {
-  $('.question').click(function() {
-    $(this).next('.answer').slideToggle();
-  });
-});
-
-<head>
-  <script src="/faq.js"></script>
-</head>
-
-const faqData = [
-  {
-    question: "Qu'est-ce que Next.js ?",
-    answer: "Next.js est un framework pour React qui facilite la création d'applications web performantes et évolutives."
-  },
-  {
-    question: "Comment puis-je ajouter jQuery à mon application Next.js ?",
-    answer: "Vous pouvez ajouter jQuery en utilisant npm ou en ajoutant la bibliothèque directement dans votre fichier HTML."
-  },
-  // ...
-];
-
 function FAQ() {
+  const [searchTerm, setSearchTerm] = React.useState("");
+
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
   return (
     <div>
       <h1>FAQ</h1>
-      {faqData.map((item, index) => (
-        <div key={index}>
-          <h2 className="question">{item.question}</h2>
-          <p className="answer">{item.answer}</p>
-        </div>
-      ))}
+      <div>
+        <input
+          type="text"
+          placeholder="Recherche"
+          value={searchTerm}
+          onChange={handleSearchChange}
+        />
+        <button>Rechercher</button>
+      </div>
+      {faqData
+        .filter(
+          (item) =>
+            item.question.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            item.answer.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+        .map((item, index) => (
+          <div key={index}>
+            <h2 className="question">{item.question}</h2>
+            <p className="answer">{item.answer}</p>
+          </div>
+        ))}
     </div>
   );
-}
+
+
+$(document).ready(function() {
+  $('.search-button').click(function() {
+    const searchTerm = $('.search-input').val().toLowerCase();
+    $('.question').each(function() {
+      if ($(this).text().toLowerCase().includes(searchTerm)) {
+        $(this).parent().show();
+      } else {
+        $(this).parent().hide();
+      }
+    });
+  });
+});
