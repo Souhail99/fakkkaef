@@ -33,15 +33,27 @@ function FAQ() {
   );
 
 
-$(document).ready(function() {
-  $('.search-button').click(function() {
-    const searchTerm = $('.search-input').val().toLowerCase();
-    $('.question').each(function() {
-      if ($(this).text().toLowerCase().includes(searchTerm)) {
-        $(this).parent().show();
-      } else {
-        $(this).parent().hide();
-      }
-    });
-  });
-});
+.question {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.answer {
+  display: none;
+}
+
+.question-button {
+  display: inline-block;
+  margin-left: 10px;
+  padding: 5px;
+  background-color: #ccc;
+  color: #000;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.question-button:hover {
+  background-color: #aaa;
+  color: #fff;
+}
