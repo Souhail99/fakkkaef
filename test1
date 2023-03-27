@@ -28,3 +28,45 @@ export async function getServerSideProps({ req }) {
     },
   };
 }
+
+
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
+
+const withAuth = (WrappedComponent, password) => {
+  const Auth = () => {
+    const router = useRouter();
+    const [isAuthed, setIsAuthed] = useState(false);
+
+    useEffect(() => {
+      const auth = async () => {
+        const isAuthenticated = // Vérifiez si le mot de passe est correct en utilisant l'état global de l'application
+        setIsAuthed(isAuthenticated);
+
+        if (!isAuthenticated) {
+          router.push('/login');
+        }
+      };
+
+      auth();
+    }, []);
+
+    if (!isAuthed) {
+      return null;
+    }
+
+    return <WrappedComponent />;
+  };
+
+  return Auth;
+};
+
+export default withAuth;
+
+import withAuth from '../components/withAuth';
+
+const SecretPage = () => {
+  return <h1>Page sécurisée</h1>;
+};
+
+export default withAuth(SecretPage, 'password');
