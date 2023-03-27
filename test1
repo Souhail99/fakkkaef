@@ -1,0 +1,30 @@
+import { useRouter } from 'next/router';
+import { useState } from 'react';
+
+export default function SecurePage({ isAuthenticated }) {
+  const router = useRouter();
+  const [password, setPassword] = useState('');
+
+  if (!isAuthenticated) {
+    router.push('/login');
+    return null;
+  }
+
+  return (
+    <div>
+      <h1>Secure Page</h1>
+      <p>This page is secured with a password.</p>
+    </div>
+  );
+}
+
+export async function getServerSideProps({ req }) {
+  const password = req.cookies.password; // ou récupérez le mot de passe dans l'état global de l'application
+  const isAuthenticated = password === 'monmotdepasse'; // Vérifiez si le mot de passe est correct
+
+  return {
+    props: {
+      isAuthenticated,
+    },
+  };
+}
