@@ -1,0 +1,23 @@
+function vote(uint proposalIndex, bool _vote) public {
+        Proposal storage proposal = proposals[proposalIndex];
+        require(block.timestamp >= proposal.startTime, "Voting has not started yet.");
+        require(block.timestamp < proposal.endTime, "Voting has ended.");
+        require(!proposal.voted[msg.sender], "You have already voted.");
+        if (_vote) {
+            proposal.yesVotes++;
+        } else {
+            proposal.noVotes++;
+        }
+        proposal.voted[msg.sender] = true;
+    }
+
+    function executeProposal(uint proposalIndex) public {
+        Proposal storage proposal = proposals[proposalIndex];
+        require(block.timestamp >= proposal.endTime, "Voting has not ended yet.");
+        require(proposal.state == ProposalState.Active, "Proposal is not active.");
+        if (proposal.yesVotes > proposal.noVotes) {
+            proposal.state = ProposalState.Succeeded;
+        } else {
+            proposal.state = ProposalState.Defeated;
+        }
+    }
