@@ -21,3 +21,14 @@ function vote(uint proposalIndex, bool _vote) public {
             proposal.state = ProposalState.Defeated;
         }
     }
+
+
+const initialState1 = {
+  count1: 0,
+};
+const { useGlobalState: useGlobalState1, setGlobalState: setGlobalState1 } = createGlobalState(initialState1);
+
+const initialState2 = {
+  count2: 0,
+};
+const { useGlobalState: useGlobalState2, setGlobalState: setGlobalState2 } = createGlobalState(initialState2);
