@@ -34,15 +34,12 @@ const initialState2 = {
 const { useGlobalState: useGlobalState2, setGlobalState: setGlobalState2 } = createGlobalState(initialState2);
 
 
-const mdxRef = useRef(null); // Référence à l'élément contenant le contenu MDX
 
-  useEffect(() => {
-    if (mdxRef.current) {
-      const html = mdxRef.current.innerHTML;
-      const virtualElement = document.createElement('div');
-      virtualElement.innerHTML = html;
+const match = string.match(/ID de la proposition : (\d+)/);
 
-      const headings = virtualElement.getElementsByTagName('h2');
-      console.log(headings); // Affiche la liste des éléments <h2> dans la console
-    }
-  }, [source]);
+if (match !== null) {
+  const id = parseInt(match[1], 10);
+  console.log(id); // Outputs: 5
+} else {
+  console.log("ID de la proposition not found");
+}
