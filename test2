@@ -43,3 +43,20 @@ if (match !== null) {
 } else {
   console.log("ID de la proposition not found");
 }
+
+// Vérifier si MetaMask est installé
+if (typeof window.ethereum !== 'undefined') {
+  const web3 = new Web3(window.ethereum);
+
+  // Demander la permission de connexion
+  await ethereum.request({ method: 'eth_requestAccounts' });
+
+  // Récupérer l'adresse MetaMask
+  const accounts = await ethereum.request({ method: 'eth_accounts' });
+  const address = accounts[0];
+
+  // Utiliser l'adresse dans votre API
+  // ...
+} else {
+  console.log('MetaMask is not installed');
+}
