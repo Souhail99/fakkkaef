@@ -60,3 +60,5 @@ if (typeof window.ethereum !== 'undefined') {
 } else {
   console.log('MetaMask is not installed');
 }
+
+const cronExpression = `${date.getMinutes()} ${date.getHours()} ${date.getDate()} ${date.getMonth() + 1} *`;
