@@ -62,3 +62,50 @@ if (typeof window.ethereum !== 'undefined') {
 }
 
 const cronExpression = `${date.getMinutes()} ${date.getHours()} ${date.getDate()} ${date.getMonth() + 1} *`;
+
+
+// Importer les bibliothèques nécessaires
+const { create } = require('node-storage');
+
+// Créer une instance de stockage
+const store = create('./my-storage.db'); // Remplacer './my-storage.db' avec le chemin de votre fichier de stockage
+
+// Définir une fonction pour ajouter un élément
+function ajouterElement(id, etat, couleur) {
+  // Vérifier si l'ID de l'élément existe déjà dans le stockage
+  if (store.has(id)) {
+    console.error(`L'ID ${id} existe déjà dans le stockage.`);
+    return;
+  }
+
+  // Créer un objet pour représenter l'élément
+  const element = {
+    id: id,
+    etat: etat,
+    couleur: couleur
+  };
+
+  // Stocker l'objet dans le stockage
+  store.put(id, element);
+  console.log(`Élément avec l'ID ${id} ajouté avec succès au stockage.`);
+}
+
+// Définir une fonction pour récupérer un élément par son ID
+function recupererElement(id) {
+  // Vérifier si l'ID de l'élément existe dans le stockage
+  if (!store.has(id)) {
+    console.error(`L'ID ${id} n'existe pas dans le stockage.`);
+    return;
+  }
+
+  // Récupérer l'objet de l'élément à partir du stockage
+  const element = store.get(id);
+  console.log(`Élément avec l'ID ${id}: `, element);
+  return element;
+}
+
+// Utiliser les fonctions pour ajouter et récupérer des éléments
+ajouterElement(1, 'Nouveau', 'Rouge');
+ajouterElement(2, 'En cours', 'Vert');
+recupererElement(1);
+recupererElement(2);
