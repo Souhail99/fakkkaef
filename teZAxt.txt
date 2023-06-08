@@ -86,3 +86,51 @@ tr:nth-child(even) {
 input[type="checkbox"] {
   transform: scale(1.5);
 }
+
+
+
+import { MongoClient } from 'mongodb';
+
+// ...
+
+export const getStaticProps: GetStaticProps = async () => {
+  // Connexion à la base de données MongoDB
+  const uri = 'mongodb://localhost:27017'; // Remplacez par votre URI de connexion MongoDB
+  const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+
+  try {
+    await client.connect();
+    const database = client.db('myDatabase'); // Remplacez 'myDatabase' par le nom de votre base de données
+    const collection = database.collection('myCollection'); // Remplacez 'myCollection' par le nom de votre collection
+
+    // Récupération des données depuis la base de données
+    const documents = await collection.find().toArray();
+
+    const posts = documents.map((doc) => {
+      const { mdxString } = doc; // Remplacez 'mdxString' par le nom de votre champ représentant la chaîne mdx dans la base de données
+      // Autres transformations et opérations sur les données selon vos besoins
+      return { mdxString };
+    });
+
+    return { props: { posts } };
+  } catch (error) {
+    console.error(error);
+    return { props: { posts: [] } };
+  } finally {
+    await client.close();
+  }
+};
+
+// ...
+
+const CardComponent: FC<{ post: Post }> = ({ post }: { post: Post }) => {
+  const { mdxString } = post;
+
+  // Utilisez la chaîne de caractères mdx pour afficher le contenu
+
+  return (
+    // Votre code de composant de carte modifié pour utiliser la chaîne de caractères mdx
+  );
+};
+
+// ...
