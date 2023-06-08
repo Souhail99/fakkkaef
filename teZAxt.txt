@@ -185,3 +185,12 @@ useEffect(() => {
         return null; // Ajout de cette clause pour les cas non satisfaits
       }
     })}
+    
+    const MDXComponent = ({ mdxString }) => {
+  return <ReactMarkdown>{mdxString}</ReactMarkdown>;
+};
+
+<div>
+      <h1>Contenu MDX :</h1>
+      <MDXComponent mdxString={mdxString} />
+    </div>
