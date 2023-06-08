@@ -177,3 +177,21 @@ useEffect(() => {
           query: { string1, string2 },
         }}
         as="/my-slug" // Remplacez "my-slug" par la valeur de votre slug
+        
+       
+       import { useRouter } from 'next/router';
+
+const PostPage = () => {
+  const router = useRouter();
+  const { string1, string2 } = router.query;
+
+  return (
+    <div>
+      <h1>Page du slug : {router.query.slug}</h1>
+      <p>String 1 : {string1}</p>
+      <p>String 2 : {string2}</p>
+    </div>
+  );
+};
+
+export default PostPage;
