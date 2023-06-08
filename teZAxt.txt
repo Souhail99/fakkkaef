@@ -157,3 +157,17 @@ export const getStaticProps: GetStaticProps = async () => {
 };
 
 // ...
+
+useEffect(() => {
+  const filteredPostsTitles: string[] = posts
+    .map((post: Post) => post.metaData.title.toLowerCase())
+    .filter((title: string) =>
+      title.includes(searchString.trim().toLowerCase())
+    );
+
+  const refilteredPosts: Post[] = posts.filter((post: Post) =>
+    filteredPostsTitles.includes(post.metaData.title.toLowerCase())
+  );
+
+  setFilteredPosts(refilteredPosts);
+}, [searchString, posts]);
