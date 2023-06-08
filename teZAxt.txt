@@ -172,25 +172,8 @@ useEffect(() => {
   setFilteredPosts(refilteredPosts);
 }, [searchString, posts]);
 
-
-{Array.isArray(filteredPosts) &&
-    filteredPosts.map((post: Post, index: number) => {
-      if (
-        (!isAllTag &&
-          post.metaData.tags.some((tag: Tag) => tags.includes(tag))) ||
-        isAllTag
-      ) {
-        return <CardComponent key={index} post={post} />;
-      } else {
-        return null; // Ajout de cette clause pour les cas non satisfaits
-      }
-    })}
-    
-    const MDXComponent = ({ mdxString }) => {
-  return <ReactMarkdown>{mdxString}</ReactMarkdown>;
-};
-
-<div>
-      <h1>Contenu MDX :</h1>
-      <MDXComponent mdxString={mdxString} />
-    </div>
+ href={{
+          pathname: '/[slug]',
+          query: { string1, string2 },
+        }}
+        as="/my-slug" // Remplacez "my-slug" par la valeur de votre slug
