@@ -171,3 +171,17 @@ useEffect(() => {
 
   setFilteredPosts(refilteredPosts);
 }, [searchString, posts]);
+
+
+{Array.isArray(filteredPosts) &&
+    filteredPosts.map((post: Post, index: number) => {
+      if (
+        (!isAllTag &&
+          post.metaData.tags.some((tag: Tag) => tags.includes(tag))) ||
+        isAllTag
+      ) {
+        return <CardComponent key={index} post={post} />;
+      } else {
+        return null; // Ajout de cette clause pour les cas non satisfaits
+      }
+    })}
