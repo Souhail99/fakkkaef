@@ -195,3 +195,74 @@ const PostPage = () => {
 };
 
 export default PostPage;
+
+
+import { useEffect, useState } from 'react';
+import { Web3Provider } from '@ethersproject/providers';
+import { Web3ReactProvider } from '@web3-react/core';
+import { WalletConnectProvider } from '@web3-react/walletconnect-provider';
+import { Button } from '@mui/material';
+import Web3Modal from 'web3modal';
+
+function getLibrary(provider: any): Web3Provider {
+  const library = new Web3Provider(provider);
+  library.pollingInterval = 12000;
+  return library;
+}
+
+const WalletButton = () => {
+  const [web3Modal, setWeb3Modal] = useState<Web3Modal | null>(null);
+  const [provider, setProvider] = useState<any | null>(null);
+
+  useEffect(() => {
+    const modal = new Web3Modal({
+      network: 'mainnet', // Mettez ici le réseau Ethereum souhaité
+      cacheProvider: true,
+      providerOptions: {
+        walletconnect: {
+          package: WalletConnectProvider,
+          options: {
+            infuraId: 'INFURA_PROJECT_ID', // Remplacez par votre propre ID de projet Infura
+          },
+        },
+      },
+    });
+    setWeb3Modal(modal);
+  }, []);
+
+  const connectWallet = async () => {
+    try {
+      if (web3Modal) {
+        const externalProvider = await web3Modal.connect();
+        setProvider(externalProvider);
+      }
+    } catch (error) {
+      console.log('Erreur de connexion au portefeuille :', error);
+    }
+  };
+
+  return (
+    <Web3ReactProvider getLibrary={getLibrary}>
+      <Button variant="contained" onClick={connectWallet}>
+        Connecter le portefeuille
+      </Button>
+    </Web3ReactProvider>
+  );
+};
+
+export default WalletButton;
+
+
+import WalletButton from './components/WalletButton';
+
+const HomePage = () => {
+  return (
+    <div>
+      <h1>Ma page d'accueil</h1>
+      <WalletButton />
+    </div>
+  );
+};
+
+export default HomePage;
+
