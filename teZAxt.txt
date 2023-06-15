@@ -306,3 +306,24 @@ else:
     # Afficher le message d'erreur en cas d'échec de la requête
     error_message = data['message']
     print(f"Erreur lors de la récupération des transactions : {error_message}")
+
+
+# Endpoint pour récupérer le taux de change ETH/USD à une date spécifique
+        coingecko_url = f'https://api.coingecko.com/api/v3/coins/ethereum/history?date={timestamp}&localization=false'
+        coingecko_response = requests.get(coingecko_url)
+        coingecko_data = coingecko_response.json()
+
+        # Vérifier si la requête a réussi
+        if coingecko_response.status_code == 200:
+            # Récupérer le taux de change ETH/USD à la date de la transaction
+            eth_usd_rate = coingecko_data['market_data']['current_price']['usd']
+            value_usd = value_eth * eth_usd_rate
+
+            print(f"Transaction: {tx_hash}")
+            print(f"De: {from_address}")
+            print(f"Montant: {value_eth} ETH")
+            print(f"Montant en USD: {value_usd} USD")
+            print(f"Timestamp: {timestamp}")
+            print("------------------------")
+        else:
+            print(f"Erreur lors de la récupération du taux de change ETH/USD : {coingecko_data['error']}")
