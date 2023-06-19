@@ -327,3 +327,37 @@ else:
             print("------------------------")
         else:
             print(f"Erreur lors de la récupération du taux de change ETH/USD : {coingecko_data['error']}")
+
+
+import { useEffect } from 'react';
+
+const PlotPage = () => {
+  useEffect(() => {
+    // Appeler votre script R ici
+    const { exec } = require('child_process');
+    const command = 'Rscript plot.R';
+    
+    exec(command, (error, stdout, stderr) => {
+      if (error) {
+        console.error(`Erreur lors de l'exécution du script R : ${error.message}`);
+        return;
+      }
+      
+      console.log('Le script R a été exécuté avec succès.');
+      
+      // Afficher le plot généré dans la page
+      const plotPath = 'plot.png';
+      const img = document.createElement('img');
+      img.src = plotPath;
+      document.body.appendChild(img);
+    });
+  }, []);
+
+  return (
+    <div>
+      <h1>Page de plot</h1>
+    </div>
+  );
+};
+
+export default PlotPage;
