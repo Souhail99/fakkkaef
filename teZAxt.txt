@@ -361,3 +361,23 @@ const PlotPage = () => {
 };
 
 export default PlotPage;
+
+
+data = [...]  # Votre liste de dictionnaires
+
+monthly_sums = {}
+for item in data:
+    date = datetime.strptime(item['date'], '%Y-%m-%d')  # Convertir la date en objet datetime
+    month_year = date.strftime('%m-%Y')  # Formater le mois et l'année
+    if month_year in monthly_sums:
+        monthly_sums[month_year] += item['chiffre']
+    else:
+        monthly_sums[month_year] = item['chiffre']
+sorted_months = sorted(monthly_sums.keys(), key=lambda x: datetime.strptime(x, '%m-%Y'))
+
+plt.plot(months, sums)
+plt.xlabel('Mois')
+plt.ylabel('Somme des chiffres')
+plt.title('Évolution de la somme des chiffres par mois')
+plt.xticks(rotation=45)
+plt.show()
