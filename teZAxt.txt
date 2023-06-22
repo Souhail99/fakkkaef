@@ -375,6 +375,9 @@ for item in data:
         monthly_sums[month_year] = item['chiffre']
 sorted_months = sorted(monthly_sums.keys(), key=lambda x: datetime.strptime(x, '%m-%Y'))
 
+months = [datetime.strptime(month, '%m-%Y').strftime('%b %Y') for month in sorted_months]
+sums = [monthly_sums[month] for month in sorted_months]
+
 plt.plot(months, sums)
 plt.xlabel('Mois')
 plt.ylabel('Somme des chiffres')
