@@ -454,5 +454,44 @@ function MyComponent() {
 
 export default MyComponent;
 
+///////////////////////////////////////////////
 
+import { NextApiRequest, NextApiResponse } from 'next';
+import { spawn } from 'child_process';
+
+function runPythonScript(): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const pythonProcess = spawn('python', ['chemin_vers_votre_script_python.py']);
+
+    let scriptOutput = '';
+
+    pythonProcess.stdout.on('data', (data) => {
+      scriptOutput += data.toString();
+    });
+
+    pythonProcess.stderr.on('data', (error) => {
+      // Gérer les erreurs éventuelles
+      console.error(error.toString());
+      reject("Une erreur s'est produite lors de l'exécution du script Python.");
+    });
+
+    pythonProcess.on('close', (code) => {
+      if (code === 0) {
+        resolve(scriptOutput);
+      } else {
+        reject("Une erreur s'est produite lors de l'exécution du script Python.");
+      }
+    });
+  });
+}
+
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  try {
+    const scriptOutput = await runPythonScript();
+    res.send(scriptOutput);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error);
+  }
+}
 
