@@ -384,3 +384,75 @@ plt.ylabel('Somme des chiffres')
 plt.title('Évolution de la somme des chiffres par mois')
 plt.xticks(rotation=45)
 plt.show()
+
+//////////////////////////////
+
+import { NextApiRequest, NextApiResponse } from 'next';
+import { spawn } from 'child_process';
+
+export default function handler(req: NextApiRequest, res: NextApiResponse) {
+  const pythonProcess = spawn('python', ['chemin_vers_votre_script_python.py']);
+
+  pythonProcess.stdout.on('data', (data) => {
+    // Renvoyer les données renvoyées par le script Python en tant que réponse de l'API
+    res.send(data.toString());
+  });
+
+  pythonProcess.stderr.on('data', (error) => {
+    // Gérer les erreurs éventuelles
+    console.error(error.toString());
+    res.status(500).send("Une erreur s'est produite lors de l'exécution du script Python.");
+  });
+}
+
+
+///////////////////////
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Générer les données pour le tracé
+x = np.linspace(0, 2 * np.pi, 100)
+y = np.sin(x)
+
+# Créer le tracé
+plt.plot(x, y)
+
+# Enregistrer le tracé dans un fichier
+plt.savefig('plot.png')
+
+
+
+////////////////////
+
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+
+function MyComponent() {
+  const [plotData, setPlotData] = useState<string | null>(null);
+
+  useEffect(() => {
+    axios.get('/api/myScript')
+      .then((response) => {
+        setPlotData(response.data);
+      })
+      .catch((error) => {
+        console.error("Une erreur s'est produite lors de l'appel à l'API :", error);
+      });
+  }, []);
+
+  return (
+    <div>
+      {plotData ? (
+        <img src={plotData} alt="Tracé" />
+      ) : (
+        <p>Chargement du tracé...</p>
+      )}
+    </div>
+  );
+}
+
+export default MyComponent;
+
+
+
