@@ -1,0 +1,334 @@
+TEST 1 :
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
+import "@openzeppelin/contracts/utils/structs/EnumerableSet.sol";
+import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
+
+contract PeerToPeerExchangeTrade {
+    AggregatorV3Interface internal priceFeed;
+ 
+
+    mapping(address => uint256) public balances;
+    address public owner;
+    uint public minimum;
+    uint public maximum;
+
+    using EnumerableSet for EnumerableSet.AddressSet;
+    EnumerableSet.AddressSet private Traders;
+
+    enum TradeState {
+        Pending, 
+        Active, 
+        Canceled, 
+        Defeated, 
+        Succeeded, 
+        Queued, 
+        Expired, 
+        Executed
+    }
+    
+    TradeState public state = TradeState.Pending;
+
+    struct Trade{
+        uint256 id;
+        uint256 amount;
+        uint256 time;
+        address trader;
+        TradeState state;
+    }
+
+    struct Trader {
+        uint256 id;
+        address trader;
+        uint numberTrades;
+        uint256 amountetherTraded;
+        uint256 amountfiatTraded;
+    }
+
+    mapping(uint => Trade) public A_Trade;
+    mapping(uint256 => Trader[]) public TheTraders;
+    mapping(address => Trader) public LastTrader;
+    mapping(address => EnumerableSet.AddressSet) internal cadeaux42;
+    mapping(address => uint256) public rewards;
+
+    event Rewards(address indexed user, uint256 amount);
+
+    event Deposit(address indexed user, uint256 amount);
+    event Withdraw(address indexed user, uint256 amount);
+    event Traded(address indexed user, string _description, uint256 etherAmount, uint256 cashAmount);
+
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Only contract owner can call this function");
+        _;
+    }
+
+    constructor() {
+        owner = msg.sender;
+        numero = 0;
+        minimum = 0;
+        maximum = 100; // Set your desired maximum value
+    }
+
+    //0x9326BFA02ADD2366b30bacB125260Af641031331
+    function getLatestPrice() public view returns (int) {
+        priceFeed = setPriceFeed(0x9326BFA02ADD2366b30bacB125260Af641031331);
+        (
+            uint80 roundID, 
+            int price,
+            uint startedAt,
+            uint timeStamp,
+            uint80 answeredInRound
+        ) = priceFeed.latestRoundData();
+        return price;
+    }
+    function deposit() external payable {
+        require(msg.value > 0, "Invalid deposit amount");
+
+        balances[msg.sender] += msg.value;
+        emit Deposit(msg.sender, msg.value);
+    }
+
+    function withdraw(uint256 amount) external {
+        require(amount > 0, "Invalid withdrawal amount");
+        require(balances[msg.sender] >= amount, "Insufficient balance");
+
+        balances[msg.sender] -= amount;
+        payable(msg.sender).transfer(amount);
+        emit Withdraw(msg.sender, amount);
+    }
+
+
+    function trade(string memory _description, uint256 _etherAmount, uint256 _cashAmount) external {
+        require(_etherAmount > 0 && _cashAmount > 0, "Invalid trade amounts");
+        require(balances[msg.sender] >= _cashAmount, "Insufficient balance");
+
+        balances[msg.sender] -= _cashAmount;
+        balances[msg.sender] += _etherAmount;
+
+        Trade storage result = A_Trade[numero];
+        result.id = numero;
+        result.etherAmount = _etherAmount;
+        result.cashAmount = _cashAmount;
+        result.time = block.timestamp;
+        result.trader = address(msg.sender);
+        result.state = TradeState.Succeeded;
+
+        Trader storage result = LastTrader[address(msg.sender)];
+        result.id = numero; // dernier trade effectué
+        result.trader = address(msg.sender);
+        result.numberTrades += 1;
+        result.amountetherTraded += _etherAmount;
+        result.amountfiatTraded += _cashAmount;
+
+
+        emit Traded(msg.sender, _description, _etherAmount, cashAmount);
+
+    }
+
+    function trade2(string memory description, uint256 etherAmount, uint256 cashAmount) external {
+        require(etherAmount > 0 && cashAmount > 0, "Invalid trade amounts");
+        require(balances[msg.sender] >= cashAmount, "Insufficient balance");
+
+        balances[msg.sender] -= cashAmount;
+        balances[msg.sender] += etherAmount;
+
+        uint256 tradeId = numero + 1;
+        A_Trade[tradeId] = Trade({
+            id: tradeId,
+            etherAmount: etherAmount,
+            cashAmount: cashAmount,
+            time: block.timestamp,
+            trader: msg.sender,
+            state: TradeState.Succeeded
+        });
+
+        Trader storage trader = lastTrader[msg.sender];
+        trader.id = tradeId;
+        trader.trader = msg.sender;
+        trader.numberTrades++;
+        trader.amountEtherTraded += etherAmount;
+        trader.amountCashTraded += cashAmount;
+
+        emit TradeExecuted(msg.sender, description, etherAmount, cashAmount);
+    }
+
+
+    function getBalance() external view returns (uint256) {
+        return balances[msg.sender];
+    }
+
+    function transferOwnership(address newOwner) external onlyOwner {
+        require(newOwner != owner, "Invalid new owner address");
+        owner = newOwner;
+    } 
+
+    // Input minimum and maximum values for trading
+    function setMinimum(uint256 _minimum) external onlyOwner {
+        require(_minimum >= 0, "Invalid minimum amount");
+        minimum = _minimum;
+    }
+
+    function setMaximum(uint256 _maximum) external onlyOwner {
+        require(_maximum >= minimum, "Invalid maximum amount");
+        maximum = _maximum;
+    }
+
+    // Change Price Feed
+    function setPriceFeed(address _priceFeed) external onlyOwner {
+        priceFeed = AggregatorV3Interface(_priceFeed);
+    }
+    function AutoDestruction(address apocalypse) public {
+        require(creator == msg.sender, "Seul le createur peut lancer le mode Armageddon.");
+        selfdestruct(payable(apocalypse));
+    }
+}
+
+
+TEST 2 :
+
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
+import "@openzeppelin/contracts/utils/structs/EnumerableSet.sol";
+import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
+
+contract PeerToPeerExchangeTrade {
+    AggregatorV3Interface internal priceFeed;
+
+    mapping(address => uint256) public balances;
+    address public owner;
+    uint256 public minimum;
+    uint256 public maximum;
+
+    using EnumerableSet for EnumerableSet.AddressSet;
+    EnumerableSet.AddressSet private traders;
+
+    enum TradeState {
+        Pending,
+        Active,
+        Canceled,
+        Defeated,
+        Succeeded,
+        Queued,
+        Expired,
+        Executed
+    }
+
+    struct Trade {
+        uint256 id;
+        uint256 etherAmount;
+        uint256 cashAmount;
+        uint256 time;
+        address trader;
+        TradeState state;
+    }
+
+    struct Trader {
+        uint256 id;
+        address trader;
+        uint256 numberTrades;
+        uint256 amountEtherTraded;
+        uint256 amountCashTraded;
+    }
+
+    mapping(uint256 => Trade) public trades;
+    mapping(uint256 => Trader[]) public tradersByTrade;
+    mapping(address => Trader) public lastTrader;
+    mapping(address => EnumerableSet.AddressSet) internal rewards42;
+
+    event Deposit(address indexed user, uint256 amount);
+    event Withdraw(address indexed user, uint256 amount);
+    event TradeExecuted(address indexed user, string description, uint256 etherAmount, uint256 cashAmount);
+
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Only contract owner can call this function");
+        _;
+    }
+
+    constructor() {
+        owner = msg.sender;
+        minimum = 0;
+        maximum = 100; // Set your desired maximum value
+    }
+
+    function getLatestPrice() public view returns (int256) {
+        priceFeed = AggregatorV3Interface(0x9326BFA02ADD2366b30bacB125260Af641031331);
+        (, int256 price, , , ) = priceFeed.latestRoundData();
+        return price;
+    }
+
+    function deposit() external payable {
+        require(msg.value > 0, "Invalid deposit amount");
+
+        balances[msg.sender] += msg.value;
+        emit Deposit(msg.sender, msg.value);
+    }
+
+    function withdraw(uint256 amount) external {
+        require(amount > 0, "Invalid withdrawal amount");
+        require(balances[msg.sender] >= amount, "Insufficient balance");
+
+        balances[msg.sender] -= amount;
+        payable(msg.sender).transfer(amount);
+        emit Withdraw(msg.sender, amount);
+    }
+
+    function trade(string memory description, uint256 etherAmount, uint256 cashAmount) external {
+        require(etherAmount > 0 && cashAmount > 0, "Invalid trade amounts");
+        require(balances[msg.sender] >= cashAmount, "Insufficient balance");
+
+        balances[msg.sender] -= cashAmount;
+        balances[msg.sender] += etherAmount;
+
+        uint256 tradeId = trades.length;
+        trades[tradeId] = Trade({
+            id: tradeId,
+            etherAmount: etherAmount,
+            cashAmount: cashAmount,
+            time: block.timestamp,
+            trader: msg.sender,
+            state: TradeState.Succeeded
+        });
+
+        Trader storage trader = lastTrader[msg.sender];
+        trader.id = tradeId;
+        trader.trader = msg.sender;
+        trader.numberTrades++;
+        trader.amountEtherTraded += etherAmount;
+        trader.amountCashTraded += cashAmount;
+
+        emit TradeExecuted(msg.sender, description, etherAmount, cashAmount);
+    }
+
+    function getBalance() external view returns (uint256) {
+        return balances[msg.sender];
+    }
+
+    function transferOwnership(address newOwner) external onlyOwner {
+        require(newOwner != owner, "Invalid new owner address");
+        owner = newOwner;
+    }
+
+    function setMinimum(uint256 _minimum) external onlyOwner {
+        require(_minimum >= 0, "Invalid minimum amount");
+        minimum = _minimum;
+    }
+
+    function setMaximum(uint256 _maximum) external onlyOwner {
+        require(_maximum >= minimum, "Invalid maximum amount");
+        maximum = _maximum;
+    }
+
+    function setPriceFeed(address _priceFeed) external onlyOwner {
+        priceFeed = AggregatorV3Interface(_priceFeed);
+    }
+
+
+}
