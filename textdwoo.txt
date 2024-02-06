@@ -1,0 +1,19 @@
+import os
+
+# Chemin du dossier contenant les dossiers
+dossier_parent = "."
+
+# Vérification de l'existence du dossier
+if not os.path.exists(dossier_parent):
+    print(f"Le dossier '{dossier_parent}' n'existe pas.")
+else:
+    # Utilisation de os.listdir() pour obtenir la liste des dossiers
+    dossiers = [nom for nom in os.listdir(dossier_parent) if os.path.isdir(os.path.join(dossier_parent, nom))]
+
+    if not dossiers:
+        print(f"Aucun dossier trouvé dans le dossier '{dossier_parent}'.")
+    else:
+        # Affichage des dossiers
+        print("Dossiers présents :")
+        for dossier in dossiers:
+            print(dossier)
