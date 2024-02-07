@@ -48,3 +48,10 @@ for chemin_relatif in chemins_relatifs:
     with open(chemin_absolu, "r") as fichier:
         contenu = fichier.read()
         # Faire quelque chose avec le contenu du fichier
+ const errors = {};
+        if (!values.contractAddress) {
+          errors.contractAddress = "Contract address is required";
+        } else if (values.contractAddress.length !== 42) {
+          errors.contractAddress = "Invalid Contract Address";
+        }
+        return errors;
