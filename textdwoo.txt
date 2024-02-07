@@ -156,3 +156,96 @@ Copy code
 .search-button:hover {
   background-color: #0056b3;
 }
+
+
+//////////////////////////////////////////////
+
+
+<Form className="flex flex-col items-center gap-4 md:flex-row md:items-end">
+  <div className="flex w-full flex-col gap-2 md:w-1/2">
+    <div className="custom-select">
+      <select
+        id="network"
+        name="network"
+        value={values.network}
+        onChange={handleChange}
+        className="custom-select__select"
+      >
+        {networkOptionsMarkup}
+      </select>
+      <span className="custom-select__icon">
+        <Link
+          href={NETWORKS[values.network].url}
+          isExternal
+          showAnchorIcon
+        >
+          site
+        </Link>
+      </span>
+    </div>
+  </div>
+  <div className="custom-input md:w-1/2">
+    <input
+      id="contractAddress"
+      name="contractAddress"
+      type="text"
+      autoComplete="off"
+      value={values.contractAddress}
+      onChange={handleChange}
+      className="custom-input__input"
+      placeholder="Contract address"
+    />
+    <span className="custom-input__icon">
+      <Button
+        type="submit"
+        isLoading={isSubmitting}
+        className="p-2"
+        isIconOnly
+        isDisabled={!isValid}
+      >
+        <MagnifyingGlassIcon />
+      </Button>
+    </span>
+  </div>
+</Form>
+
+.custom-select {
+  position: relative;
+  width: 100%;
+}
+
+.custom-select__select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+}
+
+.custom-select__icon {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.custom-input {
+  position: relative;
+  width: 100%;
+}
+
+.custom-input__input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+}
+
+.custom-input__icon {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
