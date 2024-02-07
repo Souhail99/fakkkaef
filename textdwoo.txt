@@ -249,3 +249,32 @@ Copy code
   transform: translateY(-50%);
 }
 
+import requests
+
+# Remplacez 'YOUR_API_KEY' par votre propre clé API d'Etherscan
+api_key = 'YOUR_API_KEY'
+
+# Adresse du contrat que vous souhaitez surveiller
+contract_address = '0x...'
+
+# Numéro de bloc de début et de fin
+start_block = '1234567'  # Numéro du bloc de début
+end_block = '1234569'  # Numéro du bloc de fin
+
+# URL de l'API d'Etherscan
+api_url = f'https://api.etherscan.io/api?module=logs&action=getLogs&fromBlock={start_block}&toBlock={end_block}&address={contract_address}&apikey={api_key}'
+
+try:
+    # Effectuer la requête HTTP
+    response = requests.get(api_url)
+    response.raise_for_status()  # Gérer les erreurs HTTP
+
+    # Convertir la réponse JSON en dictionnaire Python
+    data = response.json()
+
+    # Traiter les logs de transaction pour calculer les transactions moyennes entre les blocs
+    logs = data['result']
+    # Faites vos calculs ici...
+
+except requests.exceptions.RequestException as e:
+    print('Une erreur s\'est produite lors de la récupération des logs de transaction :', e)
