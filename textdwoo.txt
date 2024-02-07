@@ -88,6 +88,70 @@ for chemin_relatif in chemins_relatifs:
   margin-left: 5px;
 }
 
+Bien sûr, voici un exemple de code CSS complet pour un élément <select> :
+
+css
+Copy code
+/* Style de base pour le select */
+.custom-select {
+  position: relative;
+  display: inline-block;
+  width: 200px;
+}
+
+/* Style pour le select lui-même */
+.custom-select select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 5px;
+  font-size: 16px;
+  color: black; /* Couleur du texte en noir */
+  cursor: pointer;
+}
+
+/* Style pour la flèche de sélection */
+.custom-select::after {
+  content: '\25BC'; /* flèche vers le bas */
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+}
+
+/* Style pour le dropdown menu */
+.custom-select select:focus ~ .dropdown-content {
+  display: block;
+}
+
+/* Style pour les options */
+.custom-select .dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 5px;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  z-index: 1;
+}
+
+/* Style pour les options au survol */
+.custom-select .dropdown-content:hover {
+  background-color: #f1f1f1;
+}
+
+/* Style pour les options au survol */
+.custom-select .dropdown-content option {
+  padding: 5px;
+  color: black; /* Couleur du texte en noir */
+  cursor: pointer;
+}
 /* Style pour le bouton de recherche au survol */
 .search-button:hover {
   background-color: #0056b3;
