@@ -17,3 +17,15 @@ else:
         print("Dossiers présents :")
         for dossier in dossiers:
             print(dossier)
+
+
+
+
+import os
+
+chemins = ["./src/BC/Binance_0x6789.sol", "./yo/BC/Binance_0x6789.sol"]
+
+noms_fichiers = [os.path.basename(chemin) for chemin in chemins]
+noms_fichiers_sans_extension = [os.path.splitext(nom)[0] for nom in noms_fichiers]
+
+print(noms_fichiers_sans_extension)
