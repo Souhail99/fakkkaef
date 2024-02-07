@@ -34,3 +34,17 @@ prefixe_a_enlever = "./src/"
 chemins_relatifs = [chemin.replace(prefixe_a_enlever, "") for chemin in chemins]
 
 print(noms_fichiers_sans_extension)
+
+
+
+Il semble que vous essayez d'accéder à un élément spécifique de votre chemin comme s'il s'agissait d'une liste, ce qui provoque une erreur "IndexError" car les chaînes de caractères sont indexées par caractère et non par élément comme les listes.
+
+Si vous voulez ouvrir chaque fichier correspondant à chaque chemin dans votre liste chemins_relatifs, vous pouvez simplement utiliser open avec chaque chemin directement. Voici comment vous pouvez le faire :
+
+python
+Copy code
+for chemin_relatif in chemins_relatifs:
+    chemin_absolu = os.path.join(dossier_script, chemin_relatif)
+    with open(chemin_absolu, "r") as fichier:
+        contenu = fichier.read()
+        # Faire quelque chose avec le contenu du fichier
