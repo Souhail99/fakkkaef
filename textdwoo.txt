@@ -249,6 +249,42 @@ Copy code
   transform: translateY(-50%);
 }
 
+
+
+
+import os
+import git
+
+# Chemin du fichier Python en cours d'exécution
+current_dir = os.path.dirname(os.path.abspath(__file__))
+
+# Nom du dossier à créer pour cloner le dépôt
+clone_dir_name = "cloned_repo"
+
+# Chemin complet du dossier de clonage
+clone_path = os.path.join(current_dir, clone_dir_name)
+
+# URL du dépôt Git à cloner
+repo_url = "https://github.com/utilisateur/depot.git"
+
+# Clonage du dépôt dans le dossier de clonage
+repo = git.Repo.clone_from(repo_url, clone_path)
+
+# Vous pouvez maintenant utiliser 'repo' pour effectuer différentes opérations sur le dépôt cloné
+
+
+
+import shutil
+
+# Chemin du répertoire du dépôt cloné
+clone_path = "/chemin/vers/dossier/clone"
+
+# Suppression du répertoire du dépôt cloné
+shutil.rmtree(clone_path)
+
+print("Le dépôt cloné a été supprimé avec succès.")
+*0
+
 import requests
 
 # Remplacez 'YOUR_API_KEY' par votre propre clé API d'Etherscan
