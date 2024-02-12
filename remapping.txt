@@ -38,3 +38,25 @@ git_command = ["git", "submodule", "update", "--init", "--recursive"]
 
 # Exécution de la commande Git
 subprocess.run(git_command, cwd=repo_path)
+
+
+import os
+
+def trouver_fichiers_sol(chemin_dossier):
+    fichiers_sol = []
+    # Parcourir récursivement le dossier et ses sous-dossiers
+    for root, dirs, files in os.walk(chemin_dossier):
+        # Pour chaque fichier dans le dossier actuel
+        for file in files:
+            # Vérifier si le fichier a l'extension .sol
+            if file.endswith(".sol"):
+                # Ajouter le chemin complet du fichier à la liste
+                chemin_fichier = os.path.join(root, file)
+                fichiers_sol.append(chemin_fichier)
+    return fichiers_sol
+
+# Exemple d'utilisation
+chemin_dossier = "/chemin/vers/votre/dossier"
+fichiers_sol = trouver_fichiers_sol(chemin_dossier)
+print(fichiers_sol)
+
