@@ -98,3 +98,42 @@ for repertoire in repertoires:
     print(repertoire)
 
 
+
+import os
+
+def trouver_fichiers_sol_et_repertoires(chemin_dossier):
+    fichiers_sol = []
+    repertoires = []
+
+    # Ajouter la racine à la liste des répertoires
+    racine = os.path.abspath(chemin_dossier)
+    repertoires.append(racine)
+
+    # Parcourir récursivement le dossier et ses sous-dossiers
+    for root, dirs, files in os.walk(chemin_dossier):
+        # Pour chaque fichier dans le dossier actuel
+        for file in files:
+            # Vérifier si le fichier a l'extension .sol
+            if file.endswith(".sol"):
+                # Ajouter le chemin complet du fichier à la liste des fichiers .sol
+                chemin_fichier = os.path.join(root, file)
+                fichiers_sol.append(chemin_fichier)
+        # Ajouter le chemin complet du répertoire à la liste des répertoires
+        chemin_complet_repertoire = os.path.abspath(root)
+        repertoires.append(chemin_complet_repertoire)
+
+    return fichiers_sol, repertoires
+
+# Exemple d'utilisation
+chemin_dossier = "/chemin/vers/votre/dossier"
+fichiers_sol, repertoires = trouver_fichiers_sol_et_repertoires(chemin_dossier)
+
+# Affichage des chemins complets des fichiers .sol
+print("Chemins complets des fichiers .sol :")
+for fichier in fichiers_sol:
+    print(fichier)
+
+# Affichage des chemins des répertoires contenant des fichiers .sol
+print("\nChemins des répertoires contenant des fichiers .sol :")
+for repertoire in repertoires:
+    print(repertoire)
