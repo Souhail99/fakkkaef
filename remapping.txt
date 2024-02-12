@@ -31,3 +31,10 @@ for dep in dependencies:
 
 # Compiler les contrats Solidity
 # ... Ajoutez ici le code pour la compilation des contrats
+
+
+# Commande Git pour initialiser les sous-modules
+git_command = ["git", "submodule", "update", "--init", "--recursive"]
+
+# Exécution de la commande Git
+subprocess.run(git_command, cwd=repo_path)
