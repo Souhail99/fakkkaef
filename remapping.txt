@@ -137,3 +137,6 @@ for fichier in fichiers_sol:
 print("\nChemins des répertoires contenant des fichiers .sol :")
 for repertoire in repertoires:
     print(repertoire)
+
+
+s
