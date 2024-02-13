@@ -179,3 +179,23 @@ compiled_sol = compile_standard(
 
 # Accédez aux sorties compilées
 print(compiled_sol)
+
+
+import subprocess
+
+# Commande à exécuter
+command = "solc str/jd/lo.sol --allow-paths *,"
+
+# Exécuter la commande et récupérer la sortie
+process = subprocess.run(command, shell=True, capture_output=True, text=True)
+
+# Vérifier si la commande s'est exécutée avec succès
+if process.returncode == 0:
+    # Afficher la sortie de la commande
+    print("Sortie de la commande solc :")
+    print(process.stdout)
+else:
+    # Afficher un message d'erreur en cas d'échec de l'exécution de la commande
+    print("Erreur lors de l'exécution de la commande solc :")
+    print(process.stderr)
+
