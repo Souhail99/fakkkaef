@@ -139,4 +139,43 @@ for repertoire in repertoires:
     print(repertoire)
 
 
-s
+from solcx import compile_standard
+
+# Spécifiez le chemin de base
+base_path = "project/contracts"
+
+# Autorisez les chemins supplémentaires
+allow_paths = ["project/libs", "project/utils"]
+
+# Fichiers à compiler
+files = [
+    f"{base_path}/Token.sol",
+    f"{base_path}/subfolder1/ContractA.sol"
+]
+
+# Définissez les options de compilation
+compiler_options = {
+    "source_path": {
+        base_path: "",
+        **{allow_path: "" for allow_path in allow_paths}
+    }
+}
+
+# Compilez les contrats
+compiled_sol = compile_standard(
+    {
+        "language": "Solidity",
+        "sources": {file_path: {"content": open(file_path, "r").read()} for file_path in files},
+        "settings": {
+            "outputSelection": {
+                "*": {
+                    "*": ["abi", "evm.bytecode"]
+                }
+            }
+        },
+    },
+    compiler_options=compiler_options
+)
+
+# Accédez aux sorties compilées
+print(compiled_sol)
