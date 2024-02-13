@@ -1,0 +1,40 @@
+// Token.sol
+pragma solidity ^0.8.0;
+
+import "./subfolder2/SafeMath.sol";
+
+contract Token {
+    using SafeMath for uint256;
+    
+    // Implémentation du contrat
+}
+
+
+// ContractA.sol
+pragma solidity ^0.8.0;
+
+import "../utils/subfolder3/Utils.sol";
+import "../utils/subfolder4/Helper.sol";
+
+contract ContractA {
+    // Implémentation du contrat
+}
+
+// SafeMath.sol
+pragma solidity ^0.8.0;
+
+library SafeMath {
+    // Implémentation de SafeMath
+}
+// Utils.sol
+pragma solidity ^0.8.0;
+
+contract Utils {
+    // Implémentation du contrat Utils
+}
+// Helper.sol
+pragma solidity ^0.8.0;
+
+contract Helper {
+    // Implémentation du contrat Helper
+}
