@@ -1,0 +1,26 @@
+import re
+
+def get_solc_version_from_file(file_path):
+    with open(file_path, 'r') as file:
+        content = file.read()
+        # Utilisation d'une expression régulière pour extraire la version spécifiée dans le pragma
+        pragma_match = re.search(r'^\s*pragma\s+solidity\s+(.*?);', content, re.MULTILINE)
+        if pragma_match:
+            version_string = pragma_match.group(1)
+            # Utilisation d'une expression régulière pour extraire la version spécifique
+            version_match = re.match(r'^\s*(\^|>|=)?\s*(\d+\.\d+\.\d+)\s*(<\s*(\d+\.\d+\.\d+))?', version_string)
+            if version_match:
+                operator = version_match.group(1)
+                version = version_match.group(2)
+                return operator, version
+        return None, None
+
+# Exemple d'utilisation
+file_path = 'votre_fichier.sol'
+operator, version = get_solc_version_from_file(file_path)
+if version:
+    print("Version Solc à installer :", version)
+    if operator:
+        print("Opérateur de contrainte :", operator)
+else:
+    print("Version Solc non spécifiée dans le fichier.")
