@@ -72,3 +72,23 @@ if min_version and max_version:
         print("Aucune version compatible trouvée.")
 else:
     print("Plage de versions Solc non spécifiée dans le fichier.")
+
+
+# Chaîne à rechercher
+pragma_string = "pragma solidity >=0.6.0 <0.9.0;"
+
+# Expression régulière pour extraire les versions minimale et maximale
+pattern = r">=([\d\.]+)\s+<([\d\.]+)"
+
+# Recherche des correspondances dans la chaîne
+matches = re.search(pattern, pragma_string)
+
+# Vérification si une correspondance est trouvée
+if matches:
+    # Extraction des versions minimale et maximale
+    min_version = matches.group(1)
+    max_version = matches.group(2)
+    print("Version minimale:", min_version)
+    print("Version maximale:", max_version)
+else:
+    print("Aucune correspondance trouvée.")
