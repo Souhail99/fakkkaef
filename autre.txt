@@ -24,3 +24,51 @@ if version:
         print("Opérateur de contrainte :", operator)
 else:
     print("Version Solc non spécifiée dans le fichier.")
+
+
+
+import re
+import semver
+
+def get_solc_version_from_file(file_path):
+    with open(file_path, 'r') as file:
+        content = file.read()
+        # Utilisation d'une expression régulière pour extraire la version spécifiée dans le pragma
+        pragma_match = re.search(r'^\s*pragma\s+solidity\s+(.*?);', content, re.MULTILINE)
+        if pragma_match:
+            version_string = pragma_match.group(1)
+            # Utilisation d'une expression régulière pour extraire les versions limites de la plage
+            version_match = re.match(r'^\s*(\d+\.\d+\.\d+)\s*<=\s*version\s*<\s*(\d+\.\d+\.\d+)', version_string)
+            if version_match:
+                min_version = version_match.group(1)
+                max_version = version_match.group(2)
+                return min_version, max_version
+        return None, None
+
+def find_matching_solc_version(required_version, installed_versions):
+    for version in installed_versions:
+        if semver.match(version, required_version):
+            return version
+    return None
+
+# Liste des versions de solc installées (simulée ici)
+installed_versions = ["0.7.6", "0.8.11", "0.8.0", "0.6.12"]
+
+# Exemple d'utilisation
+file_path = 'votre_fichier.sol'
+min_version, max_version = get_solc_version_from_file(file_path)
+if min_version and max_version:
+    print("Version minimale Solc requise :", min_version)
+    print("Version maximale Solc requise :", max_version)
+    
+    # Trouver la version la plus récente compatible
+    matching_version = None
+    for version in installed_versions:
+        if semver.compare(min_version, version) <= 0 and semver.compare(version, max_version) < 0:
+            matching_version = version
+    if matching_version:
+        print("Version Solc à installer :", matching_version)
+    else:
+        print("Aucune version compatible trouvée.")
+else:
+    print("Plage de versions Solc non spécifiée dans le fichier.")
