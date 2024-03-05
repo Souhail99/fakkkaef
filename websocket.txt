@@ -1,0 +1,53 @@
+from flask import Flask
+from flask_socketio import SocketIO
+
+app = Flask(__name__)
+socketio = SocketIO(app)
+
+@socketio.on('connect')
+def handle_connect():
+    print('Client connected')
+
+def log_to_frontend(message):
+    socketio.emit('log', {'message': message})
+
+# Exemple d'utilisation
+def some_action():
+    print('Some action occurred')
+    log_to_frontend('Some action occurred')
+
+if __name__ == '__main__':
+    socketio.run(app)
+
+
+import { useEffect, useState } from 'react';
+import io from 'socket.io-client';
+
+const socket = io('http://localhost:5000'); // Assurez-vous de remplacer l'URL par celle de votre serveur Flask
+
+function App() {
+  const [logs, setLogs] = useState([]);
+
+  useEffect(() => {
+    socket.on('log', ({ message }) => {
+      setLogs(prevLogs => [...prevLogs, message]);
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
+
+  return (
+    <div>
+      <h1>Logs en direct</h1>
+      <ul>
+        {logs.map((log, index) => (
+          <li key={index}>{log}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export default App;
