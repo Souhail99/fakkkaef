@@ -51,3 +51,38 @@ function App() {
 }
 
 export default App;
+
+
+import { useEffect, useRef } from 'react';
+import { Terminal } from 'xterm';
+import 'xterm/css/xterm.css';
+import io from 'socket.io-client';
+
+function MyTerminalComponent() {
+    const terminalRef = useRef();
+
+    useEffect(() => {
+        const term = new Terminal();
+        term.open(terminalRef.current);
+
+        // Créez une connexion WebSocket avec le serveur
+        const socket = io('http://localhost:5000'); // Remplacez localhost:5000 par l'URL de votre serveur
+
+        // Écoutez les messages WebSocket contenant les sorties de terminal
+        socket.on('terminal_output', (outputLine) => {
+            // Affichez la sortie dans le terminal xterm.js
+            term.write(outputLine + '\r\n'); // Ajoutez un retour à la ligne à chaque ligne de sortie
+        });
+
+        // Nettoyez l'intervalle lorsque le composant est démonté
+        return () => {
+            clearInterval(intervalId);
+            socket.disconnect();
+        };
+    }, []);
+
+    return <div ref={terminalRef}></div>;
+}
+
+export default MyTerminalComponent;
+
