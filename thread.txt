@@ -1,0 +1,45 @@
+import sys
+from io import StringIO
+import subprocess
+import threading
+
+def capture_output_and_write_to_file(function, output_file):
+    # Redirection de sys.stdout vers un objet StringIO
+    old_stdout = sys.stdout
+    sys.stdout = StringIO()
+
+    try:
+        # Fonction externe
+        function()
+
+        # Récupération de la sortie
+        output = sys.stdout.getvalue()
+
+        # Écriture de la sortie dans le fichier
+        with open(output_file, 'w') as f:
+            f.write(output)
+    finally:
+        # Restauration de sys.stdout
+        sys.stdout = old_stdout
+
+# Fonction externe à appeler (remplacez avec la fonction réelle)
+def external_function():
+    import time
+    for i in range(10):
+        print("Element", i)
+        time.sleep(1)
+
+# Fichier où écrire la sortie
+output_file = "output.txt"
+
+# Lancer la fonction externe dans un thread pour ne pas bloquer le script principal
+thread = threading.Thread(target=capture_output_and_write_to_file, args=(external_function, output_file))
+thread.start()
+
+# Lecture en direct de la sortie écrite dans le fichier
+with open(output_file, 'r') as f:
+    while True:
+        line = f.readline()
+        if not line:
+            break
+        print(line.strip())  # Afficher la ligne sans le saut de ligne
