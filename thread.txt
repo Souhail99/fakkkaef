@@ -43,3 +43,23 @@ with open(output_file, 'r') as f:
         if not line:
             break
         print(line.strip())  # Afficher la ligne sans le saut de ligne
+
+
+async function fetchTwoApis() {
+    try {
+        const response1 = await fetch('url_de_votre_api_1');
+        const data1 = await response1.json();
+
+        const response2 = await fetch('url_de_votre_api_2');
+        const data2 = await response2.json();
+
+        // Utilisez les données récupérées ici
+        console.log('Données de la première API :', data1);
+        console.log('Données de la deuxième API :', data2);
+    } catch (error) {
+        console.error('Une erreur s\'est produite :', error);
+    }
+}
+
+fetchTwoApis();
+6
