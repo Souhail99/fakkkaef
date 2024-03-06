@@ -62,4 +62,35 @@ async function fetchTwoApis() {
 }
 
 fetchTwoApis();
-6
+import { useEffect, useRef } from 'react';
+import { Terminal } from 'xterm';
+import 'xterm/css/xterm.css';
+
+function MyTerminalComponent() {
+    const terminalRef = useRef();
+
+    useEffect(() => {
+        const term = new Terminal();
+        term.open(terminalRef.current);
+
+        // Fonction pour écrire des lignes dans le terminal
+        function writeToTerminal(lines) {
+            lines.forEach(line => {
+                term.writeln(line);
+            });
+        }
+
+        // Exemple : écrire des lignes dans le terminal
+        const lines = ['Ligne 1', 'Ligne 2', 'Ligne 3'];
+        writeToTerminal(lines);
+
+        // Nettoyer le terminal lorsque le composant est démonté
+        return () => {
+            term.dispose();
+        };
+    }, []);
+
+    return <div ref={terminalRef}></div>;
+}
+
+export default MyTerminalComponent;
