@@ -298,3 +298,78 @@ function MyTerminalComponent() {
 export default MyTerminalComponent;
 
 
+import { useEffect, useRef, useState } from 'react';
+import { Terminal } from 'xterm';
+import { FitAddon } from 'xterm-addon-fit';
+import { WebLinksAddon } from 'xterm-addon-web-links';
+import 'xterm/css/xterm.css';
+import axios from 'axios';
+
+interface XTermComponentProps {
+  showOrHideVisuals: (show: Show, visible: boolean) => void;
+  onProgressChanged: (inProgress: boolean) => void;
+}
+
+const XTermComponent: React.FC<XTermComponentProps> = ({
+  showOrHideVisuals: onCustomFunction,
+  onProgressChanged,
+}) => {
+  const terminalRef = useRef<HTMLDivElement>(null);
+  const [fetchData, setFetchData] = useState(true); // Variable pour contrôler la récupération des données
+
+  useEffect(() => {
+    const terminal = new Terminal({
+      cursorBlink: true,
+      fontSize: 16,
+      fontFamily: '"Fira Code", monospace',
+      theme: {
+        // ...
+      },
+    });
+
+    let fitAddon = new FitAddon();
+    terminal.loadAddon(fitAddon);
+    const webLinksAddon = new WebLinksAddon();
+    terminal.loadAddon(webLinksAddon);
+
+    terminal.open(terminalRef.current);
+    fitAddon.fit();
+
+    let intervalId: NodeJS.Timeout;
+
+    const fetchDataFromAPI = async () => {
+      try {
+        const response = await axios.get('url_de_votre_api');
+        const data = response.data;
+        terminal.writeln(data); // Écrire les données dans le terminal
+        fitAddon.fit(); // Ajuster la taille du terminal
+      } catch (error) {
+        console.error('Une erreur s\'est produite lors de la récupération des données :', error);
+      }
+    };
+
+    if (fetchData) {
+      intervalId = setInterval(fetchDataFromAPI, 1000); // Récupérer les données toutes les secondes
+    }
+
+    return () => {
+      clearInterval(intervalId); // Nettoyer l'intervalle lors du démontage du composant
+      terminal.dispose(); // Disposer le terminal pour libérer les ressources
+    };
+  }, [fetchData]); // Rafraîchir l'effet lors du changement de fetchData
+
+  const toggleFetchData = () => {
+    setFetchData(prevFetchData => !prevFetchData); // Inverser l'état de fetchData
+  };
+
+  return (
+    <div>
+      <div ref={terminalRef}></div>
+      <button onClick={toggleFetchData}>Toggle Fetch Data</button> {/* Bouton pour activer/désactiver la récupération des données */}
+    </div>
+  );
+};
+
+export default XTermComponent;
+
+
