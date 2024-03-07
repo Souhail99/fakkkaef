@@ -94,3 +94,103 @@ function MyTerminalComponent() {
 }
 
 export default MyTerminalComponent;
+
+
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+
+function MyComponent() {
+    const [responseData, setResponseData] = useState([]);
+    const [stopConditionMet, setStopConditionMet] = useState(false);
+
+    useEffect(() => {
+        // Fonction pour effectuer une requête GET à l'API
+        const fetchData = async () => {
+            try {
+                const response = await axios.get('url_de_votre_api');
+                const data = response.data;
+                // Mettre à jour l'état avec les données de la réponse
+                setResponseData(prevData => [...prevData, data]);
+                // Vérifier si la condition d'arrêt est remplie
+                if (/* condition pour arrêter les requêtes */) {
+                    setStopConditionMet(true);
+                }
+            } catch (error) {
+                console.error('Une erreur s\'est produite :', error);
+            }
+        };
+
+        // Effectuer la requête toutes les x secondes jusqu'à ce que la condition d'arrêt soit remplie
+        const intervalId = setInterval(() => {
+            if (!stopConditionMet) {
+                fetchData();
+            } else {
+                clearInterval(intervalId);
+            }
+        }, 1000); // Répéter toutes les 1 seconde (ajustez cette valeur selon vos besoins)
+
+        // Nettoyer l'intervalle lorsque le composant est démonté
+        return () => clearInterval(intervalId);
+    }, [stopConditionMet]); // Exécuter l'effet à chaque changement de stopConditionMet
+
+    return (
+        <div>
+            {/* Afficher les données de la réponse */}
+            {responseData.map((data, index) => (
+                <div key={index}>{/* Afficher les données selon votre format */}</div>
+            ))}
+        </div>
+    );
+}
+
+export default MyComponent;
+
+
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+
+function MyComponent() {
+    const [responseData1, setResponseData1] = useState(null);
+    const [responseData2, setResponseData2] = useState(null);
+
+    useEffect(() => {
+        // Fonction pour effectuer les deux requêtes simultanées
+        const fetchData = async () => {
+            try {
+                // Utilisation de Promise.all() pour exécuter les deux requêtes en parallèle
+                const [response1, response2] = await Promise.all([
+                    axios.get('url_de_votre_api_1'),
+                    axios.get('url_de_votre_api_2')
+                ]);
+                // Mettre à jour l'état avec les données de la réponse 1
+                setResponseData1(response1.data);
+                // Mettre à jour l'état avec les données de la réponse 2
+                setResponseData2(response2.data);
+            } catch (error) {
+                console.error('Une erreur s\'est produite :', error);
+            }
+        };
+
+        // Appel de la fonction pour effectuer les requêtes au chargement du composant
+        fetchData();
+    }, []);
+
+    return (
+        <div>
+            {/* Afficher les données de la réponse 1 */}
+            {responseData1 && (
+                <div>
+                    {/* Afficher les données de la réponse 1 selon votre format */}
+                </div>
+            )}
+            {/* Afficher les données de la réponse 2 */}
+            {responseData2 && (
+                <div>
+                    {/* Afficher les données de la réponse 2 selon votre format */}
+                </div>
+            )}
+        </div>
+    );
+}
+
+export default MyComponent;
