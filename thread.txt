@@ -194,3 +194,43 @@ function MyComponent() {
 }
 
 export default MyComponent;
+
+
+
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+
+function MyComponent() {
+    const [data, setData] = useState(null);
+
+    useEffect(() => {
+        // Fonction pour effectuer la requête et mettre à jour l'état avec la valeur reçue
+        const fetchData = async () => {
+            try {
+                const response = await axios.get('url_de_votre_api');
+                const data = response.data;
+                setData(data);
+            } catch (error) {
+                console.error('Une erreur s\'est produite :', error);
+            }
+        };
+
+        // Effectuer la requête toutes les x secondes
+        const intervalId = setInterval(() => {
+            fetchData();
+        }, 1000); // Répéter toutes les 1 seconde (ajustez cette valeur selon vos besoins)
+
+        // Nettoyer l'intervalle lorsque le composant est démonté
+        return () => clearInterval(intervalId);
+    }, []);
+
+    return (
+        <div>
+            {/* Afficher la valeur reçue */}
+            <p>Valeur actuelle : {data}</p>
+        </div>
+    );
+}
+
+export default MyComponent;
+
