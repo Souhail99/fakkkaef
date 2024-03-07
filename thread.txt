@@ -234,3 +234,67 @@ function MyComponent() {
 
 export default MyComponent;
 
+
+import { useEffect, useRef, useState } from 'react';
+import { Terminal } from 'xterm';
+import 'xterm/css/xterm.css';
+import axios from 'axios';
+
+function MyTerminalComponent() {
+    const terminalRef = useRef();
+    const term = useRef(new Terminal());
+    const [isObjectTrue, setIsObjectTrue] = useState(() => {
+        // Récupérer l'état initial de l'objet à partir du localStorage
+        const storedValue = localStorage.getItem('maValeur');
+        return storedValue === 'true'; // Convertir en booléen
+    });
+
+    useEffect(() => {
+        term.current.open(terminalRef.current);
+
+        const fetchData = async () => {
+            try {
+                // Vérifier si l'objet est vrai avant de faire la requête
+                if (isObjectTrue) {
+                    const response = await axios.get('url_de_votre_api');
+                    const data = response.data;
+
+                    // Écrire les données dans le terminal xterm.js
+                    term.current.write(data + '\r\n'); // Ajoutez un retour à la ligne après chaque donnée
+                }
+            } catch (error) {
+                console.error('Une erreur s\'est produite :', error);
+            }
+        };
+
+        // Appeler fetchData toutes les x secondes
+        const intervalId = setInterval(fetchData, 1000);
+
+        // Nettoyer l'intervalle lorsque le composant est démonté
+        return () => clearInterval(intervalId);
+    }, [isObjectTrue]); // Ajouter isObjectTrue comme dépendance de useEffect
+
+    // Mettre à jour l'état de l'objet en écoutant les changements dans le localStorage
+    useEffect(() => {
+        const handleStorageChange = () => {
+            const storedValue = localStorage.getItem('maValeur');
+            setIsObjectTrue(storedValue === 'true');
+        };
+
+        window.addEventListener('storage', handleStorageChange);
+
+        return () => {
+            window.removeEventListener('storage', handleStorageChange);
+        };
+    }, []);
+
+    return (
+        <div>
+            <div ref={terminalRef}></div>
+        </div>
+    );
+}
+
+export default MyTerminalComponent;
+
+
